@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Fullscreen overlay */
+    #mobileOverlay {
+      position: fixed;
+      inset: 0;
+      background: black;
+      color: white;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #mobileOverlay h1 {
+      font-size: 2.2em;
+      margin-bottom: 20px;
+    }
+
+    #mobileOverlay button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Normal Website Content</h1>
+  <p>Desktop users see this normally.</p>
+
+  <div id="mobileOverlay">
+    <div>
+      <h1>Get trolled</h1>
+      <p>2ez</p>
+    </div>
+  </div>
+
+  <script>
+    function isMobile() {
+      return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    function closeOverlay() {
+      document.getElementById("mobileOverlay").style.display = "none";
+    }
+
+    if (isMobile()) {
+      document.getElementById("mobileOverlay").style.display = "flex";
+    }
+  </script>
+
+</body>
+</html>
