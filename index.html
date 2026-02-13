@@ -1,58 +1,85 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Fullscreen Alert Prank</title>
+  <title>Send Message</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      overflow: hidden;
+    body {
       font-family: Arial, sans-serif;
+      background: #0f0f14;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
     }
 
-    /* Fullscreen overlay */
-    #overlay {
-      position: fixed;
-      inset: 0;
-      background: black;
-      color: white;
-      display: none; /* start hidden */
-      align-items: center;
-      justify-content: center;
+    .box {
+      background: #1c1c25;
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
       text-align: center;
-      font-size: 3em;
-      z-index: 9999;
+    }
+
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      border: none;
+      padding: 10px;
+      resize: none;
+    }
+
+    button {
+      background: #5865F2;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background: #4752c4;
     }
   </style>
 </head>
 <body>
 
-  <h1>Hello</h1>
-
-  <!-- Fullscreen overlay -->
-  <div id="overlay">☆ミ ST4R</div>
+  <div class="box">
+    <h2>Send Me a Message</h2>
+    <textarea id="message" placeholder="Type your message..."></textarea>
+    <button onclick="sendMessage()">Send</button>
+  </div>
 
   <script>
-    // 1️⃣ First, show one alert
-    alert("☆ミ ST4R");
+    function sendMessage() {
+      const message = document.getElementById("message").value;
 
-    // 2️⃣ Then start the fullscreen overlay loop
-    const overlay = document.getElementById("overlay");
-    overlay.style.display = "flex"; // show fullscreen
+      if (!message.trim()) {
+        alert("Message cannot be empty!");
+        return;
+      }
 
-    const messages = ["☆ミ ST4R", "LOL", "2EZ", "GET TROLLED"];
-    let i = 0;
-
-    // loop every 1 second
-    setInterval(() => {
-      overlay.textContent = messages[i % messages.length]; // change text
-      i++;
-
-      // optional: flash background
-      overlay.style.background = i % 2 === 0 ? "black" : "#111";
-    }, 1000);
+      fetch("https://discord.com/api/webhooks/1471675721259946016/PwvGbLVLfz17C1yQDO1ImR4aQYRogJCsDX1F1gmuuixXfL6x7ns6tmbS2z7IrggAFpwR", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          content: "New message from website:\n\n" + message
+        })
+      })
+      .then(() => {
+        alert("Message sent!");
+        document.getElementById("message").value = "";
+      })
+      .catch(() => {
+        alert("Error sending message.");
+      });
+    }
   </script>
 
 </body>
