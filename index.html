@@ -2,8 +2,10 @@
 <html>
 <head>
   <title>Send Message</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: #0f0f14;
       color: white;
@@ -15,34 +17,57 @@
 
     .box {
       background: #1c1c25;
-      padding: 30px;
-      border-radius: 10px;
-      width: 300px;
+      padding: 40px;
+      border-radius: 16px;
+      width: 500px;
+      max-width: 90%;
       text-align: center;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    }
+
+    h2 {
+      margin-bottom: 25px;
+      font-size: 28px;
     }
 
     textarea {
       width: 100%;
-      height: 100px;
-      margin-bottom: 15px;
-      border-radius: 6px;
+      height: 180px;
+      margin-bottom: 20px;
+      border-radius: 10px;
       border: none;
-      padding: 10px;
+      padding: 15px;
+      font-size: 16px;
       resize: none;
+      outline: none;
     }
 
     button {
       background: #5865F2;
       color: white;
       border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
+      padding: 15px;
+      border-radius: 10px;
       cursor: pointer;
       width: 100%;
+      font-size: 18px;
+      font-weight: bold;
+      transition: 0.2s;
     }
 
-    button:hover {
+    button:disabled {
+      background: #3a3a45;
+      cursor: not-allowed;
+    }
+
+    button:hover:not(:disabled) {
       background: #4752c4;
+    }
+
+    .status {
+      margin-top: 15px;
+      font-size: 14px;
+      opacity: 0.8;
     }
   </style>
 </head>
@@ -51,17 +76,32 @@
   <div class="box">
     <h2>Send Me a Message</h2>
     <textarea id="message" placeholder="Type your message..."></textarea>
-    <button onclick="sendMessage()">Send</button>
+    <button id="sendBtn" onclick="sendMessage()" disabled>Send</button>
+    <div class="status" id="status"></div>
   </div>
 
   <script>
-    function sendMessage() {
-      const message = document.getElementById("message").value;
+    const textarea = document.getElementById("message");
+    const sendBtn = document.getElementById("sendBtn");
+    const status = document.getElementById("status");
 
-      if (!message.trim()) {
-        alert("Message cannot be empty!");
-        return;
+    textarea.addEventListener("input", () => {
+      sendBtn.disabled = !textarea.value.trim();
+    });
+
+    textarea.addEventListener("keydown", function(e) {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        if (!sendBtn.disabled) sendMessage();
       }
+    });
+
+    function sendMessage() {
+      const message = textarea.value.trim();
+      if (!message) return;
+
+      sendBtn.disabled = true;
+      status.textContent = "Sending...";
 
       fetch("https://discord.com/api/webhooks/1471675721259946016/PwvGbLVLfz17C1yQDO1ImR4aQYRogJCsDX1F1gmuuixXfL6x7ns6tmbS2z7IrggAFpwR", {
         method: "POST",
@@ -73,11 +113,14 @@
         })
       })
       .then(() => {
-        alert("Message sent!");
-        document.getElementById("message").value = "";
+        status.textContent = "Message sent successfully.";
+        textarea.value = "";
       })
       .catch(() => {
-        alert("Error sending message.");
+        status.textContent = "Error sending message.";
+      })
+      .finally(() => {
+        sendBtn.disabled = false;
       });
     }
   </script>
