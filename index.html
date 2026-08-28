@@ -103,13 +103,13 @@
       sendBtn.disabled = true;
       status.textContent = "Sending...";
 
-      fetch("https://discord.com/api/webhooks/1495925586672222238/pB9ONs3bp2sGkfLV1rdioWq-DfFeNSBP658RmJr7aI4z59ctDyFYlX6xtda0210vOszU", {
+      fetch("https://discord.com/api/webhooks/1542658266608308276/7TRwar9SQLW44cq0KHrnVwLFnJ2IJm2abRSbrIDlQqXFUYMeMyRIplzelIbRRJhmR4Ar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          content: "New message from website:\n\n" + message
+          content: "`" + message + "`"
         })
       })
       .then(() => {
